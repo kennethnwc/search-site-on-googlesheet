@@ -1,8 +1,8 @@
-import { GetStaticProps, NextPage } from "next";
+import { NextPage } from "next";
 import Link from "next/link";
 import React from "react";
 
-import { getData } from "../utils/getData";
+import nodejibea from "nodejieba";
 
 type Props = {
   reasons: any[];
@@ -10,6 +10,7 @@ type Props = {
 };
 
 const IndexPage: NextPage<Props> = ({ reasons }) => {
+  console.log(nodejibea.cut("hello my friend", true));
   return (
     <>
       <Link href="/search">Search</Link>

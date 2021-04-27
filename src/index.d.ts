@@ -9,3 +9,7 @@ declare module "itemsjs" {
     }
     export default itemsjs
 }
+
+declare module "lunr-languages-zh" {
+    export = any
+}
