@@ -10,11 +10,9 @@ import { getData } from "../utils/getData";
 require(`lunr-languages-zh/lunr.stemmer.support`)(lunr);
 require(`lunr-languages-zh/lunr.zh`)(lunr);
 
-type Props = { rows: any[]; l: lunr.Index };
+type Props = { rows: any[]; l: lunr.Index; response: any };
 
-const AboutPage: React.FC<Props> = ({ rows, l }) => {
-  // console.log(rows);
-
+const AboutPage: React.FC<Props> = ({ rows, l, response }) => {
   const idxRef = useRef(Index.load(l));
   const [query, setQuery] = useState("");
 
@@ -40,7 +38,6 @@ const AboutPage: React.FC<Props> = ({ rows, l }) => {
   };
 
   const [searchResult, setSearchResult] = useState(getSearchResult());
-  console.log(searchResult);
 
   const handleCheckbox = (filterName: string, filterValue: string) => (
     event: ChangeEvent<HTMLInputElement>
@@ -95,30 +92,26 @@ const AboutPage: React.FC<Props> = ({ rows, l }) => {
         </div>
       </nav>
 
-      <div className="container" style={{ marginTop: "50px" }}>
+      <div className="container">
         <h1>List of items ({searchResult.pagination.total})</h1>
 
-        <p className="text-muted">
+        {/* <p className="text-muted">
           Search performed in {searchResult.timings.search} ms, facets in{" "}
           {searchResult.timings.facets} ms
-        </p>
-
-        <div className="row">
-          <div className="col-md-2 col-xs-2">
+        </p> */}
+        <div className="flex flex-row">
+          <div id="facet-list">
             {Object.entries<any>(searchResult.data.aggregations).map(
               ([key, value]) => {
                 return (
-                  <div key={key}>
+                  <div key={key} style={{ width: "300px" }}>
                     <h5 style={{ marginBottom: "5px" }}>
                       <strong style={{ color: "#337ab7" }}>
                         {value.title}
                       </strong>
                     </h5>
 
-                    <ul
-                      className="browse-list list-unstyled long-list"
-                      style={{ marginBottom: "0px" }}
-                    >
+                    <ul className="browse-list list-unstyled long-list">
                       {Object.entries<any>(value.buckets).map(([_, valueB]) => {
                         return (
                           <li key={valueB.key}>
@@ -153,25 +146,21 @@ const AboutPage: React.FC<Props> = ({ rows, l }) => {
               }
             )}
           </div>
-          <div className="col-md-10 col-xs-10">
-            <div className="breadcrumbs">
-              {Object.entries<any>(searchResult.data.items).map(
-                ([key, item]) => {
-                  return (
-                    <div
-                      key={key}
-                      className="shadow-xl bg-white rounded-lg p-6 my-6"
-                    >
-                      {Object.entries(item).map(([a, b]) => (
-                        <div key={a}>
-                          {a} : {b}
-                        </div>
-                      ))}
+          <div className="">
+            {Object.entries<any>(searchResult.data.items).map(([key, item]) => {
+              return (
+                <div
+                  key={key}
+                  className="shadow-xl bg-white rounded-lg p-6 my-6"
+                >
+                  {Object.entries(item).map(([a, b]) => (
+                    <div key={a}>
+                      {a} : {b}
                     </div>
-                  );
-                }
-              )}
-            </div>
+                  ))}
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -191,7 +180,20 @@ export const getStaticProps: GetStaticProps = async () => {
     for (let j = 0; j < data.length; j++) {
       let temp: any = {};
       for (let k = 0; k < data[j].length; k++) {
-        temp[header[k].toLowerCase()] = data[j][k];
+        const val = data[j][k];
+        if (val === "") {
+          continue;
+        }
+        if (header[k].toLowerCase() in temp) {
+          const old = temp[header[k].toLowerCase()];
+          if (typeof old === "string") {
+            temp[header[k].toLowerCase()] = [old, val];
+          } else {
+            temp[header[k].toLowerCase()] = [...old, val];
+          }
+        } else {
+          temp[header[k].toLowerCase()] = val;
+        }
       }
       rows.push(temp);
     }
@@ -207,8 +209,6 @@ export const getStaticProps: GetStaticProps = async () => {
       this.add(v);
     });
   });
-
-  console.log(l.search("调研"));
 
   return {
     props: {
