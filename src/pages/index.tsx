@@ -1,6 +1,7 @@
 import { NextPage } from "next";
-import Link from "next/link";
 import React from "react";
+
+import Layout from "../components/layout";
 
 type Props = {
   reasons: any[];
@@ -9,9 +10,9 @@ type Props = {
 
 const IndexPage: NextPage<Props> = () => {
   return (
-    <>
-      <Link href="/search">Search</Link>
-    </>
+    <Layout title="About">
+      <h1>Hello About! 👋</h1>
+    </Layout>
   );
 };
 

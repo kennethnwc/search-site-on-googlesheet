@@ -9,6 +9,8 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@headlessui/react": "^1.1.1",
+    "@heroicons/react": "^1.0.1",
     "googleapis": "^71.0.0",
     "itemsjs": "^2.1.1",
     "lunr": "^2.3.9",

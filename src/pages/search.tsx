@@ -1,3 +1,5 @@
+import Layout from "../components/layout";
+
 import itemsjs from "itemsjs";
 import lunr, { Index } from "lunr";
 import { GetStaticProps } from "next";
@@ -68,103 +70,101 @@ const AboutPage: React.FC<Props> = ({ rows, l, response }) => {
   }, [query]);
 
   return (
-    <div className="mx-auto px-4">
-      <nav className="navbar navbar-default navbar-fixed-top">
-        <div className="container px-4">
-          <div className="navbar-header">
-            <a className="navbar-brand" href="#">
-              Header
-            </a>
+    <Layout title="Search">
+      <div className="mx-auto px-4">
+        <nav className="navbar navbar-default navbar-fixed-top">
+          <div className="relative md:px-12 md:py-2 ">
+            <input
+              type="search"
+              className="w-full bg-purple-white shadow rounded border-0 p-3 "
+              placeholder="Search by name..."
+              value={query}
+              onChange={changeQuery}
+            />
+            <div className="absolute pin-r pin-t mt-3 mr-4 text-purple-lighter"></div>
           </div>
-          <div id="navbar">
-            <form className="navbar-form navbar-left">
-              <div className="form-group">
-                <input
-                  type="text"
-                  value={query}
-                  onChange={changeQuery}
-                  className="form-control"
-                  placeholder="Search"
-                />
-              </div>
-            </form>
-          </div>
-        </div>
-      </nav>
-
-      <div className="container">
-        <h1>List of items ({searchResult.pagination.total})</h1>
-
-        {/* <p className="text-muted">
+        </nav>
+        <section className="text-gray-600 body-font">
+          <div className="container flex flex-wrap  mx-auto">
+            {/* <p className="text-muted">
           Search performed in {searchResult.timings.search} ms, facets in{" "}
           {searchResult.timings.facets} ms
         </p> */}
-        <div className="flex flex-row">
-          <div id="facet-list">
-            {Object.entries<any>(searchResult.data.aggregations).map(
-              ([key, value]) => {
-                return (
-                  <div key={key} style={{ width: "300px" }}>
-                    <h5 style={{ marginBottom: "5px" }}>
-                      <strong style={{ color: "#337ab7" }}>
-                        {value.title}
-                      </strong>
-                    </h5>
+            <div className="md:w-1/4 md:pr-12 md:py-8 md:border-r md:border-b-0 mb-10 md:mb-0 pb-10 border-b border-gray-200">
+              <div id="facet-list">
+                {Object.entries<any>(searchResult.data.aggregations).map(
+                  ([key, value]) => {
+                    return (
+                      <div key={key} style={{ width: "300px" }}>
+                        <h5 style={{ marginBottom: "5px" }}>
+                          <strong style={{ color: "#337ab7" }}>
+                            {value.title}
+                          </strong>
+                        </h5>
 
-                    <ul className="browse-list list-unstyled long-list">
-                      {Object.entries<any>(value.buckets).map(([_, valueB]) => {
-                        return (
-                          <li key={valueB.key}>
-                            <div
-                              className="checkbox block"
-                              style={{
-                                marginTop: "0px",
-                                marginBottom: "0px",
-                              }}
-                            >
-                              <label>
-                                <input
-                                  className="checkbox"
-                                  type="checkbox"
-                                  checked={
-                                    filters[value.name].indexOf(valueB.key) > -1
-                                  }
-                                  onChange={handleCheckbox(
-                                    value.name,
-                                    valueB.key
-                                  )}
-                                />
-                                {valueB.key} ({valueB.doc_count})
-                              </label>
-                            </div>
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  </div>
-                );
-              }
-            )}
-          </div>
-          <div className="">
-            {Object.entries<any>(searchResult.data.items).map(([key, item]) => {
-              return (
-                <div
-                  key={key}
-                  className="shadow-xl bg-white rounded-lg p-6 my-6"
-                >
-                  {Object.entries(item).map(([a, b]) => (
-                    <div key={a}>
-                      {a} : {b}
+                        <ul className="browse-list list-unstyled long-list">
+                          {Object.entries<any>(value.buckets).map(
+                            ([_, valueB]) => {
+                              return (
+                                <li key={valueB.key}>
+                                  <div
+                                    className="checkbox block"
+                                    style={{
+                                      marginTop: "0px",
+                                      marginBottom: "0px",
+                                    }}
+                                  >
+                                    <label>
+                                      <input
+                                        className="checkbox"
+                                        type="checkbox"
+                                        checked={
+                                          filters[value.name].indexOf(
+                                            valueB.key
+                                          ) > -1
+                                        }
+                                        onChange={handleCheckbox(
+                                          value.name,
+                                          valueB.key
+                                        )}
+                                      />
+                                      {valueB.key} ({valueB.doc_count})
+                                    </label>
+                                  </div>
+                                </li>
+                              );
+                            }
+                          )}
+                        </ul>
+                      </div>
+                    );
+                  }
+                )}
+              </div>
+            </div>
+            <div className="flex flex-col md:w-3/4 md:pl-12 md:pr-12 md:py-8">
+              <div>List of items ({searchResult.pagination.total})</div>
+              {Object.entries<any>(searchResult.data.items).map(
+                ([key, item]) => {
+                  return (
+                    <div
+                      key={key}
+                      className="shadow-xl bg-white rounded-lg p-6 my-6"
+                    >
+                      {Object.entries(item).map(([a, b]) => (
+                        <div key={a}>
+                          {a} : {b}
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              );
-            })}
+                  );
+                }
+              )}
+            </div>
           </div>
-        </div>
+        </section>
       </div>
-    </div>
+    </Layout>
   );
 };
 
