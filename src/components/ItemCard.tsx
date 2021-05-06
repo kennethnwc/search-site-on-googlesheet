@@ -9,12 +9,9 @@ export const ItemCard: React.FC<Props> = ({ raw, id }) => {
   const { title, year, author, abstract, subject, ...items } = raw;
   return (
     <div className="shadow-xl bg-white rounded-lg p-6 my-6">
-      <div className="flex flex-row">
-        <div>
-          <h1 className="mb-2 text-gray-700">{title}</h1>
-          <p className="text-grey-600 text-sm">{abstract}</p>
-        </div>
-        <div>
+      <div>
+        <h1 className="mb-2 text-gray-700">{title}</h1>
+        <div className="flex flex-row flex-wrap">
           {subject && typeof subject === "string" && (
             <Badge content={subject}></Badge>
           )}
@@ -24,11 +21,13 @@ export const ItemCard: React.FC<Props> = ({ raw, id }) => {
               return (
                 <Fragment key={`${id}-${content}`}>
                   <Badge content={content} />
-                  <div className="my-2"></div>
+                  <div className="ml-2"></div>
                 </Fragment>
               );
             })}
         </div>
+
+        <p className="text-grey-600 text-sm">{abstract}</p>
       </div>
     </div>
   );

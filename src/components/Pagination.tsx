@@ -58,20 +58,24 @@ export const Pagination = ({ numFounds }: Props) => {
             className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
             aria-label="Pagination"
           >
-            <a
-              href="#"
+            <button
               className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+              onClick={() => {
+                setPage(pageState - 1 >= 1 ? pageState - 1 : 1);
+              }}
             >
               <span className="sr-only">Previous</span>
               <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
-            </a>
+            </button>
             {pageList.map((page, i) => {
               return (
                 <button
                   key={`page-${i}`}
                   className={classNames(
-                    page === pageState ? "bg-teal-500" : "hover:bg-gray-50",
-                    "relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700"
+                    "relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium",
+                    page === pageState
+                      ? "bg-teal-500 text-white"
+                      : "hover:bg-gray-50 text-gray-700"
                   )}
                   onClick={() => {
                     setPage(page);
@@ -81,13 +85,17 @@ export const Pagination = ({ numFounds }: Props) => {
                 </button>
               );
             })}
-            <a
-              href="#"
+            <button
+              onClick={() => {
+                setPage(
+                  pageState + 1 <= totalPages ? pageState + 1 : totalPages
+                );
+              }}
               className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
             >
               <span className="sr-only">Next</span>
               <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
-            </a>
+            </button>
           </nav>
         </div>
       </div>
