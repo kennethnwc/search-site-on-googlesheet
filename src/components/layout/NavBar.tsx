@@ -1,18 +1,17 @@
-/* This example requires Tailwind CSS v2.0+ */
-import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import { useRouter } from "next/dist/client/router";
 import Link from "next/link";
 import { Fragment } from "react";
+
+/* This example requires Tailwind CSS v2.0+ */
+import { Disclosure, Menu, Transition } from "@headlessui/react";
+import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
+
+import { classNames } from "./helper";
 
 const navigation = [
   { name: "About", href: "/" },
   { name: "Search", href: "/search" },
 ];
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
-}
 
 export const NavBar: React.FC = () => {
   const { pathname } = useRouter();

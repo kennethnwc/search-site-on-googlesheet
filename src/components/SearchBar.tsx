@@ -1,9 +1,11 @@
 import React, { ChangeEvent } from "react";
+import { usePageStore } from "../stores/usePage";
 
 import { useSearchQuery } from "../stores/useSearchQuery";
 
 export const SearchBar = React.memo(() => {
   const { query, setQuery } = useSearchQuery();
+  const { resetPage } = usePageStore();
 
   return (
     <nav className="navbar navbar-default navbar-fixed-top">
@@ -15,6 +17,7 @@ export const SearchBar = React.memo(() => {
           value={query}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             setQuery(e.target.value);
+            resetPage();
           }}
         />
         <div className="absolute pin-r pin-t mt-3 mr-4 text-purple-lighter"></div>

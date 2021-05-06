@@ -5,8 +5,10 @@ import { useEffect, useRef, useState } from "react";
 
 import { Filter } from "../components/Filter";
 import { ItemCard } from "../components/ItemCard";
+import { Pagination } from "../components/Pagination";
 import { SearchBar } from "../components/SearchBar";
 import { useFilterStore } from "../stores/useFilterStore";
+import { usePageStore } from "../stores/usePage";
 import { useSearchQuery } from "../stores/useSearchQuery";
 import { SearchResultState, useSearchResults } from "../stores/useSearchResult";
 import { init_config } from "../utils/config";
@@ -27,6 +29,8 @@ const SearchPage: React.FC<Props> = ({ rows, l, response }) => {
   const [itemsjsState] = useState(itemsjs(rows, init_config));
   const { searchResult, setSearchResult } = useSearchResults();
 
+  const { page } = usePageStore();
+
   useEffect(() => {
     setSearchResult(getSearchResult());
   }, []);
@@ -40,13 +44,18 @@ const SearchPage: React.FC<Props> = ({ rows, l, response }) => {
     const result = itemsjsState.search({
       ids: search_result.map((v) => v.ref),
       filters,
+      page: page,
+      per_page: 12,
+      sort: "name_asc",
     });
     return result;
   };
 
   useEffect(() => {
     setSearchResult(getSearchResult());
-  }, [query]);
+  }, [query, page]);
+
+  console.log(searchResult);
 
   return (
     <div className="mx-auto px-4">
@@ -69,7 +78,7 @@ const SearchPage: React.FC<Props> = ({ rows, l, response }) => {
             </div>
           </div>
           <div className="flex flex-col md:w-3/4 md:pl-12 md:pr-12 md:py-8">
-            <div>List of items ({searchResult.pagination.total})</div>
+            <Pagination numFounds={searchResult.pagination.total} />
             {Object.entries<any>(searchResult.data.items).map(([key, item]) => {
               return <ItemCard id={key} key={key} raw={item} />;
             })}
