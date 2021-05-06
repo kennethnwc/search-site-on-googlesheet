@@ -1,18 +1,21 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
+import { useRouter } from "next/dist/client/router";
+import Link from "next/link";
+import { Fragment } from "react";
 
 const navigation = [
-  { name: "About", href: "/", current: true },
-  { name: "Search", href: "/search", current: false },
+  { name: "About", href: "/" },
+  { name: "Search", href: "/search" },
 ];
 
-function classNames(...classes: any) {
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function NavBar() {
+export const NavBar: React.FC = () => {
+  const { pathname } = useRouter();
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
@@ -46,19 +49,25 @@ export default function NavBar() {
                 <div className="hidden sm:block sm:ml-6">
                   <div className="flex space-x-4">
                     {navigation.map((item) => (
-                      <a
+                      <Link
                         key={item.name}
                         href={item.href}
-                        className={classNames(
-                          item.current
-                            ? "bg-gray-900 text-white"
-                            : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                          "px-3 py-2 rounded-md text-sm font-medium"
-                        )}
-                        aria-current={item.current ? "page" : undefined}
+                        passHref={true}
+                        aria-current={
+                          item.href === pathname ? "page" : undefined
+                        }
                       >
-                        {item.name}
-                      </a>
+                        <a
+                          className={classNames(
+                            item.href === pathname
+                              ? "bg-gray-900 text-white"
+                              : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                            "px-3 py-2 rounded-md text-sm font-medium"
+                          )}
+                        >
+                          {item.name}
+                        </a>
+                      </Link>
                     ))}
                   </div>
                 </div>
@@ -152,12 +161,12 @@ export default function NavBar() {
                   key={item.name}
                   href={item.href}
                   className={classNames(
-                    item.current
+                    item.href === pathname
                       ? "bg-gray-900 text-white"
                       : "text-gray-300 hover:bg-gray-700 hover:text-white",
                     "block px-3 py-2 rounded-md text-base font-medium"
                   )}
-                  aria-current={item.current ? "page" : undefined}
+                  aria-current={item.href === pathname ? "page" : undefined}
                 >
                   {item.name}
                 </a>
@@ -168,4 +177,4 @@ export default function NavBar() {
       )}
     </Disclosure>
   );
-}
+};

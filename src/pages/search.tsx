@@ -1,10 +1,9 @@
-import Layout from "../components/layout";
-
 import itemsjs from "itemsjs";
 import lunr, { Index } from "lunr";
 import { GetStaticProps } from "next";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 
+import { Layout } from "../components/Layout";
 import { init_config } from "../utils/config";
 import { customSearch } from "../utils/customSearch";
 import { getData } from "../utils/getData";

@@ -1,6 +1,7 @@
-import React from "react"; // we need this to make JSX compile
-import NavBar from "./nav-bar";
 import Head from "next/head";
+import React from "react"; // we need this to make JSX compile
+
+import { NavBar } from "./NavBar";
 
 type LayoutProps = {
   title?: string;
@@ -12,7 +13,10 @@ const layoutStyle = {
   border: "1px solid #DDD",
 };
 
-const Layout: React.FunctionComponent<LayoutProps> = ({ children, title }) => (
+export const Layout: React.FunctionComponent<LayoutProps> = ({
+  children,
+  title,
+}) => (
   <div style={layoutStyle}>
     <Head>
       <title>{title}</title>
@@ -25,4 +29,3 @@ const Layout: React.FunctionComponent<LayoutProps> = ({ children, title }) => (
     {children}
   </div>
 );
-export default Layout;
