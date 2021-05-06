@@ -3,7 +3,11 @@ import lunr, { Index } from "lunr";
 import { GetStaticProps } from "next";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 
-import { Layout } from "../components/Layout";
+import { Filter } from "../components/Filter";
+import { ItemCard } from "../components/ItemCard";
+import { Layout } from "../components/layout/Layout";
+import { useFilterStore } from "../stores/useFilterStore";
+import { SearchResultState, useSearchResults } from "../stores/useSearchResult";
 import { init_config } from "../utils/config";
 import { customSearch } from "../utils/customSearch";
 import { getData } from "../utils/getData";
@@ -17,15 +21,16 @@ const AboutPage: React.FC<Props> = ({ rows, l, response }) => {
   const idxRef = useRef(Index.load(l));
   const [query, setQuery] = useState("");
 
-  const [filters, setFilters] = useState(() => {
-    let newFilters: { [key: string]: any[] } = {};
-    Object.keys(init_config.aggregations).map((v) => (newFilters[v] = []));
-    return newFilters;
-  });
+  const { filters } = useFilterStore();
 
   const [itemsjsState] = useState(itemsjs(rows, init_config));
+  const { searchResult, setSearchResult } = useSearchResults();
 
-  const getSearchResult = () => {
+  useEffect(() => {
+    setSearchResult(getSearchResult());
+  }, []);
+
+  const getSearchResult = (): SearchResultState => {
     const search_result = customSearch({
       query: query,
       rows: rows,
@@ -36,28 +41,6 @@ const AboutPage: React.FC<Props> = ({ rows, l, response }) => {
       filters,
     });
     return result;
-  };
-
-  const [searchResult, setSearchResult] = useState(getSearchResult());
-
-  const handleCheckbox = (filterName: string, filterValue: string) => (
-    event: ChangeEvent<HTMLInputElement>
-  ) => {
-    const oldFilters = filters;
-    let newFilters = oldFilters;
-    let check = event.target.checked;
-    if (check) {
-      newFilters[filterName].push(filterValue);
-      setFilters(newFilters);
-      setSearchResult(getSearchResult());
-    } else {
-      var index = newFilters[filterName].indexOf(filterValue);
-      if (index > -1) {
-        newFilters[filterName].splice(index, 1);
-        setFilters(newFilters);
-        setSearchResult(getSearchResult());
-      }
-    }
   };
 
   const changeQuery = (e: ChangeEvent<HTMLInputElement>) => {
@@ -85,57 +68,16 @@ const AboutPage: React.FC<Props> = ({ rows, l, response }) => {
         </nav>
         <section className="text-gray-600 body-font">
           <div className="container flex flex-wrap  mx-auto">
-            {/* <p className="text-muted">
-          Search performed in {searchResult.timings.search} ms, facets in{" "}
-          {searchResult.timings.facets} ms
-        </p> */}
             <div className="md:w-1/4 md:pr-12 md:py-8 md:border-r md:border-b-0 mb-10 md:mb-0 pb-10 border-b border-gray-200">
               <div id="facet-list">
                 {Object.entries<any>(searchResult.data.aggregations).map(
                   ([key, value]) => {
                     return (
-                      <div key={key} style={{ width: "300px" }}>
-                        <h5 style={{ marginBottom: "5px" }}>
-                          <strong style={{ color: "#337ab7" }}>
-                            {value.title}
-                          </strong>
-                        </h5>
-
-                        <ul className="browse-list list-unstyled long-list">
-                          {Object.entries<any>(value.buckets).map(
-                            ([_, valueB]) => {
-                              return (
-                                <li key={valueB.key}>
-                                  <div
-                                    className="checkbox block"
-                                    style={{
-                                      marginTop: "0px",
-                                      marginBottom: "0px",
-                                    }}
-                                  >
-                                    <label>
-                                      <input
-                                        className="checkbox"
-                                        type="checkbox"
-                                        checked={
-                                          filters[value.name].indexOf(
-                                            valueB.key
-                                          ) > -1
-                                        }
-                                        onChange={handleCheckbox(
-                                          value.name,
-                                          valueB.key
-                                        )}
-                                      />
-                                      {valueB.key} ({valueB.doc_count})
-                                    </label>
-                                  </div>
-                                </li>
-                              );
-                            }
-                          )}
-                        </ul>
-                      </div>
+                      <Filter
+                        key={key}
+                        value={value}
+                        getSearchResult={getSearchResult}
+                      />
                     );
                   }
                 )}
@@ -145,18 +87,7 @@ const AboutPage: React.FC<Props> = ({ rows, l, response }) => {
               <div>List of items ({searchResult.pagination.total})</div>
               {Object.entries<any>(searchResult.data.items).map(
                 ([key, item]) => {
-                  return (
-                    <div
-                      key={key}
-                      className="shadow-xl bg-white rounded-lg p-6 my-6"
-                    >
-                      {Object.entries(item).map(([a, b]) => (
-                        <div key={a}>
-                          {a} : {b}
-                        </div>
-                      ))}
-                    </div>
-                  );
+                  return <ItemCard id={key} key={key} raw={item} />;
                 }
               )}
             </div>

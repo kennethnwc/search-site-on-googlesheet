@@ -18,7 +18,8 @@
     "next": "latest",
     "nodejieba": "^2.5.2",
     "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react-dom": "^17.0.1",
+    "zustand": "^3.5.0"
   },
   "devDependencies": {
     "@types/lunr": "^2.3.3",
