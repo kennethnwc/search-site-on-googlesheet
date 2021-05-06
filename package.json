@@ -6,7 +6,8 @@
     "build": "next build",
     "start": "next start",
     "type-check": "tsc",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "format": "prettier --write \"src/**/*.ts\""
   },
   "dependencies": {
     "@headlessui/react": "^1.1.1",
