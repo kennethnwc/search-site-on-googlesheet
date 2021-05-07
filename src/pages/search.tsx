@@ -135,6 +135,6 @@ export const getStaticProps: GetStaticProps = async () => {
       rows,
       l: l.toJSON(),
     },
-    revalidate: 10, // In seconds
+    revalidate: process.env.NODE_ENV === "development" ? 1 : 1 * 60 * 60 * 5, // In seconds
   };
 };
