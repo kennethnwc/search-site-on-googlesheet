@@ -1,0 +1,1 @@
+pm2 start yarn --name "page-search" --interpreter bash -- start

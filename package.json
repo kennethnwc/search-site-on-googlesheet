@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "next -p 3010",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 3011",
     "type-check": "tsc",
     "prepare": "husky install",
     "format": "prettier --write \"src/**/*.ts\""
