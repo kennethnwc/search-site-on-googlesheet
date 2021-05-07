@@ -1,6 +1,8 @@
 import { ChangeEvent } from "react";
+
 import { useFilterStore } from "../stores/useFilterStore";
 import { SearchResultState, useSearchResults } from "../stores/useSearchResult";
+import { CheckBox } from "./ui/CheckBox";
 
 type Props = {
   value: {
@@ -51,15 +53,14 @@ export const Filter: React.FC<Props> = ({ value, getSearchResult }) => {
                   marginBottom: "0px",
                 }}
               >
-                <label>
-                  <input
-                    className="checkbox"
-                    type="checkbox"
-                    checked={filters[value.name].indexOf(valueB.key) > -1}
-                    onChange={handleCheckbox(value.name, valueB.key)}
-                  />
+                <CheckBox
+                  checkValue={valueB.key}
+                  size="small"
+                  checked={filters[value.name].indexOf(valueB.key) > -1}
+                  onChange={handleCheckbox(value.name, valueB.key)}
+                >
                   {valueB.key} ({valueB.doc_count})
-                </label>
+                </CheckBox>
               </div>
             </li>
           );

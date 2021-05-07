@@ -55,8 +55,6 @@ const SearchPage: React.FC<Props> = ({ rows, l, response }) => {
     setSearchResult(getSearchResult());
   }, [query, page]);
 
-  console.log(searchResult);
-
   return (
     <div className="mx-auto px-4">
       <SearchBar />
