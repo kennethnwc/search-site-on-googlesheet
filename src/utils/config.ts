@@ -7,10 +7,6 @@ export const init_config = {
     "abstract in chinese",
   ],
   aggregations: {
-    type: {
-      title: "Type",
-      size: 10,
-    },
     subject: {
       title: "subject",
       size: 50,

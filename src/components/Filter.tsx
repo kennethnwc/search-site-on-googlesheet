@@ -1,7 +1,8 @@
 import { ChangeEvent } from "react";
 
 import { useFilterStore } from "../stores/useFilterStore";
-import { SearchResultState, useSearchResults } from "../stores/useSearchResult";
+import { usePageStore } from "../stores/usePage";
+import { SearchResultState } from "../stores/useSearchResult";
 import { CheckBox } from "./ui/CheckBox";
 
 type Props = {
@@ -12,28 +13,16 @@ type Props = {
   };
   getSearchResult: () => SearchResultState;
 };
-export const Filter: React.FC<Props> = ({ value, getSearchResult }) => {
-  const { filters, setFilters } = useFilterStore();
-  const { setSearchResult } = useSearchResults();
+export const Filter: React.FC<Props> = ({ value }) => {
+  const { filters, setFiltersWithField } = useFilterStore();
+  const { setPage } = usePageStore();
 
   const handleCheckbox = (filterName: string, filterValue: string) => (
     event: ChangeEvent<HTMLInputElement>
   ) => {
-    const oldFilters = filters;
-    let newFilters = oldFilters;
     let check = event.target.checked;
-    if (check) {
-      newFilters[filterName].push(filterValue);
-      setFilters(newFilters);
-      setSearchResult(getSearchResult());
-    } else {
-      var index = newFilters[filterName].indexOf(filterValue);
-      if (index > -1) {
-        newFilters[filterName].splice(index, 1);
-        setFilters(newFilters);
-        setSearchResult(getSearchResult());
-      }
-    }
+    setFiltersWithField(filterName, filterValue, check ? "ADD" : "REMOVE");
+    setPage(1);
   };
 
   return (

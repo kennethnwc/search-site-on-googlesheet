@@ -20,7 +20,7 @@ require(`lunr-languages-zh/lunr.zh`)(lunr);
 
 type Props = { rows: any[]; l: lunr.Index; response: any };
 
-const SearchPage: React.FC<Props> = ({ rows, l, response }) => {
+const SearchPage: React.FC<Props> = ({ rows, l }) => {
   const idxRef = useRef(Index.load(l));
 
   const { query } = useSearchQuery();
@@ -33,7 +33,7 @@ const SearchPage: React.FC<Props> = ({ rows, l, response }) => {
 
   useEffect(() => {
     setSearchResult(getSearchResult());
-  }, []);
+  }, [page]);
 
   const getSearchResult = (): SearchResultState => {
     const search_result = customSearch({
@@ -53,7 +53,7 @@ const SearchPage: React.FC<Props> = ({ rows, l, response }) => {
 
   useEffect(() => {
     setSearchResult(getSearchResult());
-  }, [query, page]);
+  }, [query, JSON.stringify(filters)]);
 
   return (
     <div className="mx-auto px-4">

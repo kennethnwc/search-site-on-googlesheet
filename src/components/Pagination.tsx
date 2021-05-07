@@ -6,7 +6,7 @@ import { usePageStore } from "../stores/usePage";
 interface Props {
   totalPages?: number;
   isBottom?: boolean;
-  numFounds: number;
+  numFounds?: number;
   isTop?: boolean;
 }
 
@@ -46,9 +46,12 @@ export const Pagination = ({ numFounds }: Props) => {
         <div>
           <p className="text-sm text-gray-700">
             Showing{" "}
-            <span className="font-medium">{(pageState - 1) * 12 + 1}</span> to{" "}
             <span className="font-medium">
-              {Math.min(pageState * 12, numFounds!)}
+              {(numFounds || 0) > 0 ? (pageState - 1) * 12 + 1 : 0}
+            </span>{" "}
+            to{" "}
+            <span className="font-medium">
+              {Math.min(pageState * 12, numFounds || 0)}
             </span>{" "}
             of <span className="font-medium">{numFounds}</span> results
           </p>
@@ -81,7 +84,7 @@ export const Pagination = ({ numFounds }: Props) => {
                     setPage(page);
                   }}
                 >
-                  {page >= 1 ? page : <span>&hellip;</span>}
+                  {page >= 1 ? page : <span>...</span>}
                 </button>
               );
             })}

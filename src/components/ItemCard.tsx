@@ -1,12 +1,15 @@
 import { Fragment } from "react";
 
+import { useFilterStore } from "../stores/useFilterStore";
+import { usePageStore } from "../stores/usePage";
+
 type Props = {
   raw: { [key: string]: string | string[] };
   id: string;
 };
 
 export const ItemCard: React.FC<Props> = ({ raw, id }) => {
-  const { title, year, author, abstract, subject, ...items } = raw;
+  const { title, abstract, subject } = raw;
   return (
     <div className="shadow-xl bg-white rounded-lg p-6 my-6">
       <div>
@@ -33,8 +36,18 @@ export const ItemCard: React.FC<Props> = ({ raw, id }) => {
   );
 };
 
-const Badge: React.FC<{ content: string }> = ({ content, ...props }) => (
-  <button className="bg-teal-500 text-white text-xs px-2 rounded-sm" {...props}>
-    {content}
-  </button>
-);
+const Badge: React.FC<{ content: string }> = ({ content }) => {
+  const { setFiltersWithField } = useFilterStore();
+  const { setPage } = usePageStore();
+  return (
+    <button
+      className="bg-teal-500 text-white text-xs px-1 rounded-sm m-1"
+      onClick={() => {
+        setFiltersWithField("subject", content, "ADD");
+        setPage(1);
+      }}
+    >
+      {content}
+    </button>
+  );
+};

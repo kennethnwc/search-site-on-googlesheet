@@ -1,10 +1,9 @@
 import { useRouter } from "next/dist/client/router";
 import Link from "next/link";
-import { Fragment } from "react";
 
 /* This example requires Tailwind CSS v2.0+ */
-import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
+import { Disclosure } from "@headlessui/react";
+import { MenuIcon, XIcon } from "@heroicons/react/outline";
 
 import { classNames } from "./helper";
 
