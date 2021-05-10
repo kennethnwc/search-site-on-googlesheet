@@ -1,5 +1,7 @@
 # A demo:
 
+## rememebr to add .env.local in current path
+
 ## first time deploy
 
 Install pm2 globally if not
