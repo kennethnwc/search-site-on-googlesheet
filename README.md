@@ -1,4 +1,4 @@
-# A demo:
+# A template/demo to use google sheet as database to create full text, faceted search website
 
 ## rememebr to add .env.local in current path
 
