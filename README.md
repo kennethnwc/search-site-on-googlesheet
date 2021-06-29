@@ -21,3 +21,13 @@ chmod +x deploy-update.sh
 ```bash
 ./deploy-update.sh
 ```
+
+### Example sheet
+
+https://docs.google.com/spreadsheets/d/1npaSX5Nj_TPI0i05mYX2ASDJOqdkhLb6mVG2FGi9jto/
+
+### To update the field that to want to search or facet
+
+update src/utils/config/init_config
+
+### Deploy with vercel , add env file
